@@ -41,9 +41,11 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Customers/CustomerList', [
+            'customers' => $this->customersRepository->searchCustomers($request)
+        ]);
     }
 
     /**
@@ -58,10 +60,17 @@ class CustomerController extends Controller
             'name' => 'required',
             'nic' => 'required',
             'address' => 'required',
+            "phone_numbers"    => "required|array",
+            "phone_numbers.*"  => "required|string",
         ]);
 
-        $this->customersRepository->saveCustomer($request->toArray());
-        dd('d');
+        try {
+            $this->customersRepository->saveCustomer($request->toArray());
+            return redirect()->route('customers.index')->banner('Customer created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('subscriptions')->dangerBanner('Subscription cancellation failed.');
+        }
+
     }
 
     /**

@@ -8,67 +8,61 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white shadow-xl sm:rounded-lg">
+                <div class="bg-white shadow-xl sm:rounded-lg py-5">
                     <form @submit.prevent="store">
-                        <div class="shadow">
-                            <div class="flex flex-wrap pb-2">
-                                <div class="w-1/3 ml-auto">
+                        <div class="mx-auto">
+                            <h2 class="font-semibold text-center text-xl text-gray-800 leading-tight mt-5">
+                                Customer Creation Form
+                            </h2>
+                            <div class="flex flex-wrap items-center mb-2 mt-10">
+                                <div class="w-1/3">
                                     <label class="block font-bold md:text-right md:pr-2">
                                         Name
                                     </label>
                                 </div>
-                                <div class="w-1/3 mr-auto">
+                                <div class="w-1/3  pl-2">
                                     <input class="border-2 border-gray-200 rounded w-full" v-model="form.name" type="text">
                                     <div v-if="form.errors.name" class="text-red-700">{{ form.errors.name }}</div>
                                 </div>
                             </div>
 
-                            <div class="flex flex-wrap pb-2">
-                                <div class="w-1/3 ml-auto">
+                            <div class="flex flex-wrap items-center mb-2">
+                                <div class="w-1/3">
                                     <label class="block font-bold md:text-right md:pr-2">
                                         NIC
                                     </label>
                                 </div>
-                                <div class="w-1/3 mr-auto ">
+                                <div class="w-1/3  pl-2">
                                     <input class="border-2 border-gray-200 rounded w-full" v-model="form.nic" type="text">
                                     <div v-if="form.errors.nic" class="text-red-700">{{ form.errors.nic }}</div>
                                 </div>
                             </div>
 
-                            <div class="flex flex-wrap pb-2">
-                                <div class="w-1/3 ml-auto  ">
+                            <div class="flex flex-wrap items-center mb-2">
+                                <div class="w-1/3">
                                     <label class="block font-bold md:text-right md:pr-2">
                                         Address
                                     </label>
                                 </div>
-                                <div class="w-1/3 mr-auto ">
+                                <div class="w-1/3  pl-2">
                                     <input class="border-2 border-gray-200 rounded w-full" v-model="form.address" type="text">
                                     <div v-if="form.errors.address" class="text-red-700">{{ form.errors.address }}</div>
                                 </div>
                             </div>
 
-                            <div class="flex flex-wrap pb-2">
-                                <div class="w-1/3 ml-auto  ">
+                            <div class="flex flex-wrap items-center pb-2">
+                                <div class="w-1/3">
                                     <label class="block font-bold md:text-right md:pr-2">
                                         Telephone
                                     </label>
                                 </div>
-                                <div class="w-1/3 mr-auto ">
-                                    <div
-                                        v-for="(input, index) in phoneNumbers"
-                                        :key="`phoneInput-${index}`"
-                                        class="input wrapper flex items-center"
-                                    >
-                                        <input
-                                            v-model="form.phone"
-                                            type="text"
-                                            class="h-10 rounded-lg outline-none p-2 pb-2"
-                                            placeholder=" Enter Phone Number"
-                                        />
-                                        <!--          Add Svg Icon-->
+                                <div class="w-1/3  pl-2">
+                                    <div v-for="(phone_number, index) in form.phone_numbers" :key="index" class="flex items-center mb-2">
+                                        <input type="text" v-model="form.phone_numbers[index]" class="border-2 border-gray-200 rounded w-full" />
+                                        <div v-if="form.errors.phone_numbers" class="text-red-700">{{ form.errors.phone_numbers }}</div>
                                         <svg
 
-                                            @click="addField(input, phoneNumbers)"
+                                            @click="addRow"
                                             xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 24 24"
                                             width="24"
@@ -81,16 +75,14 @@
                                                 d="M11 11V7h2v4h4v2h-4v4h-2v-4H7v-2h4zm1 11C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"
                                             />
                                         </svg>
-
-                                        <!--          Remove Svg Icon-->
                                         <svg
-                                            v-show="phoneNumbers.length > 1"
-                                            @click="removeField(index, phoneNumbers)"
+                                            @click="removeRow(index)"
                                             xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 24 24"
                                             width="24"
                                             height="24"
                                             class="ml-2 cursor-pointer"
+                                            v-if="form.phone_numbers.length > 1"
                                         >
                                             <path fill="none" d="M0 0h24v24H0z"/>
                                             <path
@@ -101,18 +93,16 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                            <div class="px-4 py-3 text-center sm:px-6">
                                 <button type="submit"
-                                        class="py-2 px-4 float-left border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600">
+                                        class="py-2 px-4 m-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 w-1/12">
                                     Cancel
                                 </button>
                                 <button type="submit"
-                                        class="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600">
+                                        class="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 w-1/12">
                                     Save
                                 </button>
                             </div>
-
                         </div>
                     </form>
                 </div>
@@ -140,7 +130,7 @@
                     name: "",
                     nic: "",
                     address: "",
-                    phone: [],
+                    phone_numbers: [""],
                 })
             }
         },
@@ -148,13 +138,14 @@
             store() {
                 this.form.post(this.route('customers.store'))
             },
-            addField(value, fieldType) {
-                fieldType.push({value: ""});
+            addRow() {
+                this.form.phone_numbers.push("");
             },
-            removeField(index, fieldType) {
-                //type.splice(index, 1);
-                fieldType.splice(index, 1);
+            removeRow(index) {
+                this.form.phone_numbers.splice(index, 1);
             }
         }
     })
 </script>
+
+

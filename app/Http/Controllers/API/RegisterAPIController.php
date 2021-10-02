@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterAPIController extends BaseController
 {
+    /**
+     * register api
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -18,27 +23,30 @@ class RegisterAPIController extends BaseController
             'password' => 'required',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
         $data = $request->all();
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
-        $user['token'] =  $user->createToken('MyApp')->plainTextToken;
+        $user['token'] = $user->createToken('MyApp')->plainTextToken;
 
         return $this->sendResponse($user, 'User register successfully.');
     }
 
+    /**login api
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $authUser = Auth::user();
-            $authUser['token'] =  $authUser->createToken('MyAuthApp')->plainTextToken;
+            $authUser['token'] = $authUser->createToken('MyAuthApp')->plainTextToken;
             return $this->sendResponse($authUser, 'User signed in');
-        }
-        else{
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        } else {
+            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
         }
     }
 

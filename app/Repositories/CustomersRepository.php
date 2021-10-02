@@ -21,6 +21,7 @@ class CustomersRepository extends BaseRepository
 
     public function __construct(Customer $model, Contact $contact)
     {
+        parent::__construct($model);
         $this->model = $model;
         $this->contact = $contact;
     }
@@ -29,20 +30,24 @@ class CustomersRepository extends BaseRepository
     {
         return $this->model->when($request->search, function ($query, $search) {
             $query->where('name', 'LIKE', '%' . $search . '%');
-        })->paginate(10);
+        })->paginate(2);
     }
 
     public function saveCustomer($data)
     {
         $customer = $this->model->create($data);
 
-        $contacts = ["0777123456", "0777123457"];
+        $contacts = $data['phone_numbers'];
+
         foreach ($contacts as $contact) {
-            $this->contact->create([
-                'customer_id' => $customer->id,
-                'telephone' => $contact
-            ]);
+            if (!is_null($contact)) {
+                $this->contact->create([
+                    'customer_id' => $customer->id,
+                    'telephone' => $contact
+                ]);
+            }
         }
 
+        return $customer;
     }
 }

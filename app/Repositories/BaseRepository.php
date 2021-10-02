@@ -28,6 +28,7 @@ class BaseRepository
     public function update(array $data, $id)
     {
         $record = $this->model->find($id);
-        return $record->update($data);
+        $record->update($data);
+        return $record;
     }
 }

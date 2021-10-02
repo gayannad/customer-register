@@ -29,12 +29,21 @@ class CustomerAPIController extends BaseController
         $this->contact = $contact;
     }
 
+    /**
+     * return customer list
+     * @param Request $request
+     */
     public function index(Request $request)
     {
-        return $request->ajax() ? Customer::paginate(2) : abort(404);
-//        return $this->sendResponse($customers, '');
+        return $request->ajax() ? Customer::paginate(10) : abort(404);
     }
 
+    /**
+     * save customer
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -52,6 +61,12 @@ class CustomerAPIController extends BaseController
         }
     }
 
+    /**update customer
+     * @param Request $request
+     * @param Customer $customer
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function update(Request $request, Customer $customer)
     {
         $this->validate($request, [
@@ -69,15 +84,19 @@ class CustomerAPIController extends BaseController
         }
     }
 
+    /**
+     * delete customer
+     * @param Customer $customer
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Customer $customer)
     {
-
+        try {
+            $customer->delete();
+            return $this->sendResponse($customer, 'Customer deleted successfully');
+        } catch (\Exception $e) {
+            return $this->sendError([], $e->getMessage());
+        }
     }
 
-    public function search(Request $request){
-        $key = $request->search;
-        $customers = Customer::where('name','LIKE','%'.$key.'%')
-            ->get();
-        return response()->json([ 'customers' => $customers ],200);
-    }
 }
