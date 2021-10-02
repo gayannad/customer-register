@@ -19,11 +19,11 @@
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                <jet-nav-link :href="route('customers.index')" :active="route().current('customers.index')">
+                                    Customer List
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('customers.create')" :active="route().current('customers.create')">
-                                    Customer Create
+                                <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                                    Customer Add
                                 </jet-nav-link>
                             </div>
                         </div>

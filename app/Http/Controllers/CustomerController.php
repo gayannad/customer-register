@@ -3,19 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Repositories\CustomersRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
     /**
+     * @var CustomersRepository
+     */
+    private $customersRepository;
+
+    /**
+     * CustomerController constructor.
+     * @param CustomersRepository $customersRepository
+     */
+    public function __construct(CustomersRepository $customersRepository)
+    {
+        $this->customersRepository = $customersRepository;
+    }
+
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return Inertia::render('Customers/CustomerList', [
+            'customers' => $this->customersRepository->searchCustomers($request)
+        ]);
     }
 
     /**
@@ -25,7 +43,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return Inertia::render('CustomerCreate');
+        return Inertia::render('Dashboard');
     }
 
     /**
@@ -41,7 +59,9 @@ class CustomerController extends Controller
             'nic' => 'required',
             'address' => 'required',
         ]);
-        Customer::create($request->all());
+
+        $this->customersRepository->saveCustomer($request->toArray());
+        dd('d');
     }
 
     /**

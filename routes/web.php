@@ -29,4 +29,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/customers/create', [\App\Http\Controllers\CustomerController::class, 'create'])->name('customers.create');
+Route::middleware(['auth:sanctum', 'verified'])->get('/customers', [\App\Http\Controllers\CustomerController::class, 'index'])->name('customers.index');
 Route::middleware(['auth:sanctum', 'verified'])->post('/customers/store', [\App\Http\Controllers\CustomerController::class, 'store'])->name('customers.store');

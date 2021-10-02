@@ -15,4 +15,9 @@ class Customer extends Model
         'address',
 
     ];
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
 }
